@@ -16,8 +16,7 @@ public class BoardDTO {
     private int categoryCode;
     private String title;
     private String content;
-    private String writer;
-    private String writerName;
+    private int writer;
     private int count;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;

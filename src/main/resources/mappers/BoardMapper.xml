@@ -17,7 +17,7 @@
         <association property="category" javaType="CategoryDTO">  <!-- property: BoardDTO안에 있는 category
                                                                      javaType: property타입 -> CategoryDTO 클래스 -->
             <id property="cCode" column="c_code"/>           <!-- id, result: CategoryDTO 안의 property와 DB의 column 매핑 -->
-            <result property="cCame" column="c_name"/>
+            <result property="cName" column="c_name"/>
         </association>
     </resultMap>
 
@@ -27,7 +27,7 @@
         <result property="name" column="c_name"/>
     </resultMap>
 
-    <select id="selectAllBoard" resultType="Board">
+    <select id="selectAllBoard" resultType="BoardDTO">
         SELECT *
         FROM board
         where status = 'y'
@@ -35,13 +35,13 @@
 
     <select id="selectBoardByNo" parameterType="int" resultMap="boardResultMap">
         select
-        , a.title
-        ,b.c_code
+         a.title
+        , b.c_code
         , b.c_name
-        <!--        , a.writer-->
-        , a.count
         , a.created_date
         , a.content
+        , a.count
+        , a.writer
         from board a
         join category b on a.category_code = b.c_code
         where a.status = 'y'
@@ -55,25 +55,25 @@
         category_code
         , title
         , content
-<!--        , writer-->
+        , writer
         )
         values
         (
         #{category.cCode}
         , #{title}
         , #{content}
-        <!--    , #{writer}-->
+        , #{writer}
         )
 
     </insert>
 
 
-    <update id="updateBoard" parameterType="board">
+    <update id="updateBoard" parameterType="BoardDTO">
         update board
         set title = #{title},
         category_code = #{category.cCode},
         content = #{content},
-<!--        writer = #{writer},-->
+        writer = #{writer},
         modified_date = NOW()
         WHERE no = #{no}
 
