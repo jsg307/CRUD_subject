@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.multi.crud_subject.board.model.dao.BoardMapper">
+
+    <!-- 게시판과 카테고리 연관관계 매핑 -->
+    <resultMap type="BoardDTO" id="boardResultMap">
+        <id property="no" column="no"/>  <!--property: DTO하고 일치, column: 테이블 컬럼과 일치-->
+        <result property="title" column="title"/>
+        <!-- <result property="writer" column="writer"/> 현재는 로그인 기능 없어서 작성자 식별 불가-->
+        <result property="count" column="count"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="content" column="content"/>
+
+        <!-- CategoryDTO와 연관관계 매핑 -->
+        <association property="category" javaType="CategoryDTO">  <!-- property: BoardDTO안에 있는 category
+                                                                     javaType: property타입 -> CategoryDTO 클래스 -->
+            <id property="cCode" column="c_code"/>           <!-- id, result: CategoryDTO 안의 property와 DB의 column 매핑 -->
+            <result property="cCame" column="c_name"/>
+        </association>
+    </resultMap>
+
+    <!-- 카테고리 전용 매핑 -->
+    <resultMap type="CategoryDTO" id="categoryResultMap">
+        <id property="code" column="c_code"/>
+        <result property="name" column="c_name"/>
+    </resultMap>
+
+    <select id="selectAllBoard" resultType="Board">
+        SELECT *
+        FROM board
+        where status = 'y'
+    </select>
+
+    <select id="selectBoardByNo" parameterType="int" resultMap="boardResultMap">
+        select
+        , a.title
+        ,b.c_code
+        , b.c_name
+        <!--        , a.writer-->
+        , a.count
+        , a.created_date
+        , a.content
+        from board a
+        join category b on a.category_code = b.c_code
+        where a.status = 'y'
+        and no = #{no}
+    </select>
+
+
+    <insert id="insertBoard" useGeneratedKeys="true" keyProperty="no">
+        insert into board
+        (
+        category_code
+        , title
+        , content
+<!--        , writer-->
+        )
+        values
+        (
+        #{category.cCode}
+        , #{title}
+        , #{content}
+        <!--    , #{writer}-->
+        )
+
+    </insert>
+
+
+    <update id="updateBoard" parameterType="board">
+        update board
+        set title = #{title},
+        category_code = #{category.cCode},
+        content = #{content},
+<!--        writer = #{writer},-->
+        modified_date = NOW()
+        WHERE no = #{no}
+
+
+
+    </update>
+
+    <delete id="deleteBoard" parameterType="int">
+        update board
+        set status = 'N'
+        where no = #{no}
+    </delete>
+
+</mapper>

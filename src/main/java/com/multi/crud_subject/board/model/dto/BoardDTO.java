@@ -1,4 +1,4 @@
-package com.multi.crud_subject.model.dto;
+package com.multi.crud_subject.board.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
