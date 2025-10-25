@@ -35,7 +35,8 @@
 
     <select id="selectBoardByNo" parameterType="int" resultMap="boardResultMap">
         select
-         a.title
+        a.no
+        , a.title
         , b.c_code
         , b.c_name
         , a.created_date

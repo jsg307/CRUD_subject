@@ -39,6 +39,7 @@ class BoardMapperTest {
     }
 
     @Test
+    @Transactional
     void selectBoardByNo() {
         //given
         int no = 1;
@@ -54,7 +55,7 @@ class BoardMapperTest {
 
         //given
         CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setCCode(10);
+        categoryDTO.setCCode(1);
 
         BoardDTO board = BoardDTO.builder()
                 .categoryCode(categoryDTO.getCCode())
